@@ -1,5 +1,5 @@
 global:
-  scrape_interval: 1m
+  scrape_interval: 5m
   evaluation_interval: 1m
 
 scrape_configs:
@@ -12,5 +12,5 @@ scrape_configs:
     static_configs:
       - targets:
           - "host.docker.internal:9100"
-      - labels:
+        labels:
           host: "ocelot"
