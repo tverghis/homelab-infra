@@ -5,8 +5,8 @@
     "name": "ad5sxhj",
     "namespace": "default",
     "uid": "dac08030-ea90-4c78-b286-dbdd3430094e",
-    "resourceVersion": "1786177331756016",
-    "generation": 13,
+    "resourceVersion": "1786252260879993",
+    "generation": 15,
     "creationTimestamp": "2026-08-08T07:31:15Z",
     "labels": {
       "grafana.app/deprecatedInternalID": "825591804997632"
@@ -16,11 +16,11 @@
       "grafana.app/folder": "ffujmcdrgxds0f",
       "grafana.app/managedBy": "classic-file-provisioning",
       "grafana.app/managerId": "Home Monitoring",
-      "grafana.app/sourceChecksum": "524eed5242e485de617519cbfecfc6b4",
+      "grafana.app/sourceChecksum": "24efc01dc548a6cbb781ae73a30af694",
       "grafana.app/sourcePath": "/var/lib/grafana/dashboards/node-overview.json",
-      "grafana.app/sourceTimestamp": "1786177311000",
+      "grafana.app/sourceTimestamp": "1786252174000",
       "grafana.app/updatedBy": "access-policy:service",
-      "grafana.app/updatedTimestamp": "2026-08-08T08:22:11Z",
+      "grafana.app/updatedTimestamp": "2026-08-09T05:11:00Z",
       "grafana.app/folderTitle": "Home Monitoring",
       "grafana.app/folderUrl": "/dashboards/f/ffujmcdrgxds0f/home-monitoring"
     }
@@ -50,7 +50,7 @@
     "cursorSync": "Off",
     "editable": true,
     "elements": {
-      "panel-1": {
+      "panel-5": {
         "kind": "Panel",
         "spec": {
           "data": {
@@ -69,8 +69,8 @@
                       "kind": "DataQuery",
                       "spec": {
                         "editorMode": "code",
-                        "expr": "100 * (1 - avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\", host=~\"$host\"}[5m])))",
-                        "legendFormat": "__auto",
+                        "expr": "100 * (1 - avg by (host) (rate(node_cpu_seconds_total{mode=\"idle\"}[5m])))\n",
+                        "legendFormat": "{{host}}",
                         "range": true
                       },
                       "version": "v0"
@@ -84,66 +84,77 @@
             }
           },
           "description": "",
-          "id": 1,
+          "id": 5,
           "links": [],
           "title": "CPU Utilization",
           "vizConfig": {
-            "group": "stat",
+            "group": "heatmap",
             "kind": "VizConfig",
             "spec": {
               "fieldConfig": {
                 "defaults": {
-                  "color": {
-                    "fixedColor": "#ad46ff",
-                    "mode": "thresholds"
-                  },
-                  "decimals": 2,
-                  "max": 100,
-                  "min": 0,
-                  "thresholds": {
-                    "mode": "percentage",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      },
-                      {
-                        "color": "#EAB839",
-                        "value": 60
-                      },
-                      {
-                        "color": "red",
-                        "value": 80
-                      }
-                    ]
-                  },
-                  "unit": "percent"
+                  "custom": {
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "scaleDistribution": {
+                      "type": "linear"
+                    }
+                  }
                 },
                 "overrides": []
               },
               "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "percentChangeColorMode": "standard",
-                "reduceOptions": {
-                  "calcs": [
-                    "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
                 },
-                "showPercentChange": false,
-                "textMode": "auto",
-                "wideLayout": true
+                "calculate": false,
+                "cellGap": 1,
+                "cellValues": {
+                  "unit": "percent"
+                },
+                "color": {
+                  "exponent": 0.5,
+                  "fill": "dark-orange",
+                  "max": 100,
+                  "min": 0,
+                  "mode": "scheme",
+                  "reverse": false,
+                  "scale": "exponential",
+                  "scheme": "RdYlGn",
+                  "steps": 64
+                },
+                "exemplars": {
+                  "color": "rgba(255,0,255,0.7)"
+                },
+                "filterValues": {
+                  "le": 1e-9
+                },
+                "legend": {
+                  "show": false
+                },
+                "rowsFrame": {
+                  "layout": "auto"
+                },
+                "tooltip": {
+                  "mode": "single",
+                  "showColorScale": false,
+                  "yHistogram": false
+                },
+                "yAxis": {
+                  "axisPlacement": "left",
+                  "reverse": false
+                }
               }
             },
             "version": "13.1.3"
           }
         }
       },
-      "panel-2": {
+      "panel-6": {
         "kind": "Panel",
         "spec": {
           "data": {
@@ -162,8 +173,8 @@
                       "kind": "DataQuery",
                       "spec": {
                         "editorMode": "code",
-                        "expr": "100 * (1 - node_memory_MemAvailable_bytes{host=~\"$host\"} / node_memory_MemTotal_bytes{host=~\"$host\"})",
-                        "legendFormat": "__auto",
+                        "expr": "100 * (1 - node_memory_MemAvailable_bytes{} / node_memory_MemTotal_bytes{})",
+                        "legendFormat": "{{host}}",
                         "range": true
                       },
                       "version": "v0"
@@ -177,159 +188,77 @@
             }
           },
           "description": "",
-          "id": 2,
+          "id": 6,
           "links": [],
           "title": "Memory Utilization",
           "vizConfig": {
-            "group": "stat",
+            "group": "heatmap",
             "kind": "VizConfig",
             "spec": {
               "fieldConfig": {
                 "defaults": {
-                  "color": {
-                    "fixedColor": "#ad46ff",
-                    "mode": "thresholds"
-                  },
-                  "decimals": 2,
-                  "max": 100,
-                  "min": 0,
-                  "thresholds": {
-                    "mode": "percentage",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      },
-                      {
-                        "color": "#EAB839",
-                        "value": 60
-                      },
-                      {
-                        "color": "red",
-                        "value": 80
-                      }
-                    ]
-                  },
+                  "custom": {
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "scaleDistribution": {
+                      "type": "linear"
+                    }
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "calculate": false,
+                "cellGap": 1,
+                "cellValues": {
                   "unit": "percent"
                 },
-                "overrides": []
-              },
-              "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "percentChangeColorMode": "standard",
-                "reduceOptions": {
-                  "calcs": [
-                    "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-                },
-                "showPercentChange": false,
-                "textMode": "auto",
-                "wideLayout": true
-              }
-            },
-            "version": "13.1.3"
-          }
-        }
-      },
-      "panel-3": {
-        "kind": "Panel",
-        "spec": {
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "query": {
-                      "datasource": {
-                        "name": "prometheus"
-                      },
-                      "group": "prometheus",
-                      "kind": "DataQuery",
-                      "spec": {
-                        "editorMode": "code",
-                        "expr": "node_thermal_zone_temp{type=\"cpu-thermal\", host=~\"$host\"}",
-                        "legendFormat": "__auto",
-                        "range": true
-                      },
-                      "version": "v0"
-                    },
-                    "refId": "A"
-                  }
-                }
-              ],
-              "queryOptions": {},
-              "transformations": []
-            }
-          },
-          "description": "",
-          "id": 3,
-          "links": [],
-          "title": "CPU Temperature",
-          "vizConfig": {
-            "group": "stat",
-            "kind": "VizConfig",
-            "spec": {
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "fixedColor": "#ad46ff",
-                    "mode": "thresholds"
-                  },
-                  "decimals": 0,
+                "color": {
+                  "exponent": 0.5,
+                  "fill": "dark-orange",
                   "max": 100,
                   "min": 0,
-                  "thresholds": {
-                    "mode": "percentage",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      },
-                      {
-                        "color": "#EAB839",
-                        "value": 60
-                      },
-                      {
-                        "color": "red",
-                        "value": 80
-                      }
-                    ]
-                  },
-                  "unit": "celsius"
+                  "mode": "scheme",
+                  "reverse": false,
+                  "scale": "exponential",
+                  "scheme": "RdYlGn",
+                  "steps": 64
                 },
-                "overrides": []
-              },
-              "options": {
-                "colorMode": "background",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "percentChangeColorMode": "standard",
-                "reduceOptions": {
-                  "calcs": [
-                    "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
+                "exemplars": {
+                  "color": "rgba(255,0,255,0.7)"
                 },
-                "showPercentChange": false,
-                "textMode": "auto",
-                "wideLayout": true
+                "filterValues": {
+                  "le": 1e-9
+                },
+                "legend": {
+                  "show": false
+                },
+                "rowsFrame": {
+                  "layout": "auto"
+                },
+                "tooltip": {
+                  "mode": "single",
+                  "showColorScale": false,
+                  "yHistogram": false
+                },
+                "yAxis": {
+                  "axisPlacement": "left",
+                  "reverse": false
+                }
               }
             },
             "version": "13.1.3"
           }
         }
       },
-      "panel-4": {
+      "panel-7": {
         "kind": "Panel",
         "spec": {
           "data": {
@@ -348,8 +277,8 @@
                       "kind": "DataQuery",
                       "spec": {
                         "editorMode": "code",
-                        "expr": "100 * (1 - node_filesystem_avail_bytes{mountpoint=\"/\", host=~\"$host\"} / node_filesystem_size_bytes{mountpoint=\"/\", host=~\"$host\"})",
-                        "legendFormat": "__auto",
+                        "expr": "100 * (1 - node_filesystem_avail_bytes{mountpoint=\"/\"} / node_filesystem_size_bytes{mountpoint=\"/\"})",
+                        "legendFormat": "{{host}}",
                         "range": true
                       },
                       "version": "v0"
@@ -363,11 +292,11 @@
             }
           },
           "description": "",
-          "id": 4,
+          "id": 7,
           "links": [],
           "title": "Root FS Utilization",
           "vizConfig": {
-            "group": "stat",
+            "group": "bargauge",
             "kind": "VizConfig",
             "spec": {
               "fieldConfig": {
@@ -378,15 +307,11 @@
                   "max": 100,
                   "min": 0,
                   "thresholds": {
-                    "mode": "percentage",
+                    "mode": "absolute",
                     "steps": [
                       {
                         "color": "green",
                         "value": 0
-                      },
-                      {
-                        "color": "#EAB839",
-                        "value": 60
                       },
                       {
                         "color": "red",
@@ -399,11 +324,19 @@
                 "overrides": []
               },
               "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
+                "displayMode": "gradient",
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "overflow": "ellipsis",
+                  "placement": "bottom",
+                  "showLegend": false
+                },
+                "maxVizHeight": 300,
+                "minVizHeight": 16,
+                "minVizWidth": 8,
+                "namePlacement": "auto",
                 "orientation": "auto",
-                "percentChangeColorMode": "standard",
                 "reduceOptions": {
                   "calcs": [
                     "lastNotNull"
@@ -411,9 +344,113 @@
                   "fields": "",
                   "values": false
                 },
-                "showPercentChange": false,
-                "textMode": "auto",
-                "wideLayout": true
+                "showUnfilled": false,
+                "sizing": "auto",
+                "valueMode": "color"
+              }
+            },
+            "version": "13.1.3"
+          }
+        }
+      },
+      "panel-8": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "node_thermal_zone_temp{type=\"cpu-thermal\"}",
+                        "legendFormat": "{{host}}",
+                        "range": true
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 8,
+          "links": [],
+          "title": "CPU Temperature",
+          "vizConfig": {
+            "group": "heatmap",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "scaleDistribution": {
+                      "type": "linear"
+                    }
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "calculate": false,
+                "cellGap": 1,
+                "cellValues": {
+                  "unit": "celsius"
+                },
+                "color": {
+                  "exponent": 0.5,
+                  "fill": "dark-orange",
+                  "max": 100,
+                  "min": 30,
+                  "mode": "scheme",
+                  "reverse": false,
+                  "scale": "exponential",
+                  "scheme": "RdBu",
+                  "steps": 64
+                },
+                "exemplars": {
+                  "color": "rgba(255,0,255,0.7)"
+                },
+                "filterValues": {
+                  "le": 1e-9
+                },
+                "legend": {
+                  "show": false
+                },
+                "rowsFrame": {
+                  "layout": "auto"
+                },
+                "tooltip": {
+                  "mode": "single",
+                  "showColorScale": false,
+                  "yHistogram": false
+                },
+                "yAxis": {
+                  "axisPlacement": "left",
+                  "reverse": false
+                }
               }
             },
             "version": "13.1.3"
@@ -422,64 +459,59 @@
       }
     },
     "layout": {
-      "kind": "RowsLayout",
+      "kind": "GridLayout",
       "spec": {
-        "rows": [
+        "items": [
           {
-            "kind": "RowsLayoutRow",
+            "kind": "GridLayoutItem",
             "spec": {
-              "collapse": false,
-              "layout": {
-                "kind": "AutoGridLayout",
-                "spec": {
-                  "columnWidthMode": "narrow",
-                  "items": [
-                    {
-                      "kind": "AutoGridLayoutItem",
-                      "spec": {
-                        "element": {
-                          "kind": "ElementReference",
-                          "name": "panel-1"
-                        }
-                      }
-                    },
-                    {
-                      "kind": "AutoGridLayoutItem",
-                      "spec": {
-                        "element": {
-                          "kind": "ElementReference",
-                          "name": "panel-2"
-                        }
-                      }
-                    },
-                    {
-                      "kind": "AutoGridLayoutItem",
-                      "spec": {
-                        "element": {
-                          "kind": "ElementReference",
-                          "name": "panel-4"
-                        }
-                      }
-                    },
-                    {
-                      "kind": "AutoGridLayoutItem",
-                      "spec": {
-                        "element": {
-                          "kind": "ElementReference",
-                          "name": "panel-3"
-                        }
-                      }
-                    }
-                  ],
-                  "maxColumnCount": 4,
-                  "rowHeightMode": "standard"
-                }
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-5"
               },
-              "repeat": {
-                "mode": "variable",
-                "value": "host"
+              "height": 8,
+              "width": 12,
+              "x": 0,
+              "y": 0
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-6"
               },
-              "title": "$host"
+              "height": 8,
+              "width": 12,
+              "x": 12,
+              "y": 0
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-7"
+              },
+              "height": 8,
+              "width": 12,
+              "x": 0,
+              "y": 8
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-8"
+              },
+              "height": 8,
+              "width": 12,
+              "x": 12,
+              "y": 8
             }
           }
         ]
