@@ -5,8 +5,8 @@
     "name": "ad5sxhj",
     "namespace": "default",
     "uid": "dac08030-ea90-4c78-b286-dbdd3430094e",
-    "resourceVersion": "1786177250631009",
-    "generation": 12,
+    "resourceVersion": "1786177331756016",
+    "generation": 13,
     "creationTimestamp": "2026-08-08T07:31:15Z",
     "labels": {
       "grafana.app/deprecatedInternalID": "825591804997632"
@@ -16,11 +16,11 @@
       "grafana.app/folder": "ffujmcdrgxds0f",
       "grafana.app/managedBy": "classic-file-provisioning",
       "grafana.app/managerId": "Home Monitoring",
-      "grafana.app/sourceChecksum": "b4bcb20b7811af4c55547d9e325aca59",
+      "grafana.app/sourceChecksum": "524eed5242e485de617519cbfecfc6b4",
       "grafana.app/sourcePath": "/var/lib/grafana/dashboards/node-overview.json",
-      "grafana.app/sourceTimestamp": "1786177179000",
+      "grafana.app/sourceTimestamp": "1786177311000",
       "grafana.app/updatedBy": "access-policy:service",
-      "grafana.app/updatedTimestamp": "2026-08-08T08:20:50Z",
+      "grafana.app/updatedTimestamp": "2026-08-08T08:22:11Z",
       "grafana.app/folderTitle": "Home Monitoring",
       "grafana.app/folderUrl": "/dashboards/f/ffujmcdrgxds0f/home-monitoring"
     }
@@ -69,7 +69,7 @@
                       "kind": "DataQuery",
                       "spec": {
                         "editorMode": "code",
-                        "expr": "100 * (1 - avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\", host=\"$host\"}[5m])))",
+                        "expr": "100 * (1 - avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\", host=~\"$host\"}[5m])))",
                         "legendFormat": "__auto",
                         "range": true
                       },
@@ -162,7 +162,7 @@
                       "kind": "DataQuery",
                       "spec": {
                         "editorMode": "code",
-                        "expr": "100 * (1 - node_memory_MemAvailable_bytes{host=\"$host\"} / node_memory_MemTotal_bytes{host=\"$host\"})",
+                        "expr": "100 * (1 - node_memory_MemAvailable_bytes{host=~\"$host\"} / node_memory_MemTotal_bytes{host=~\"$host\"})",
                         "legendFormat": "__auto",
                         "range": true
                       },
@@ -255,7 +255,7 @@
                       "kind": "DataQuery",
                       "spec": {
                         "editorMode": "code",
-                        "expr": "node_thermal_zone_temp{type=\"cpu-thermal\", host=\"$host\"}",
+                        "expr": "node_thermal_zone_temp{type=\"cpu-thermal\", host=~\"$host\"}",
                         "legendFormat": "__auto",
                         "range": true
                       },
@@ -348,7 +348,7 @@
                       "kind": "DataQuery",
                       "spec": {
                         "editorMode": "code",
-                        "expr": "100 * (1 - node_filesystem_avail_bytes{mountpoint=\"/\", host=\"$host\"} / node_filesystem_size_bytes{mountpoint=\"/\", host=\"$host\"})",
+                        "expr": "100 * (1 - node_filesystem_avail_bytes{mountpoint=\"/\", host=~\"$host\"} / node_filesystem_size_bytes{mountpoint=\"/\", host=~\"$host\"})",
                         "legendFormat": "__auto",
                         "range": true
                       },
@@ -422,49 +422,67 @@
       }
     },
     "layout": {
-      "kind": "AutoGridLayout",
+      "kind": "RowsLayout",
       "spec": {
-        "columnWidthMode": "narrow",
-        "items": [
+        "rows": [
           {
-            "kind": "AutoGridLayoutItem",
+            "kind": "RowsLayoutRow",
             "spec": {
-              "element": {
-                "kind": "ElementReference",
-                "name": "panel-1"
-              }
-            }
-          },
-          {
-            "kind": "AutoGridLayoutItem",
-            "spec": {
-              "element": {
-                "kind": "ElementReference",
-                "name": "panel-2"
-              }
-            }
-          },
-          {
-            "kind": "AutoGridLayoutItem",
-            "spec": {
-              "element": {
-                "kind": "ElementReference",
-                "name": "panel-4"
-              }
-            }
-          },
-          {
-            "kind": "AutoGridLayoutItem",
-            "spec": {
-              "element": {
-                "kind": "ElementReference",
-                "name": "panel-3"
-              }
+              "collapse": false,
+              "layout": {
+                "kind": "AutoGridLayout",
+                "spec": {
+                  "columnWidthMode": "narrow",
+                  "items": [
+                    {
+                      "kind": "AutoGridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "AutoGridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-2"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "AutoGridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-4"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "AutoGridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-3"
+                        }
+                      }
+                    }
+                  ],
+                  "maxColumnCount": 4,
+                  "rowHeightMode": "standard"
+                }
+              },
+              "repeat": {
+                "mode": "variable",
+                "value": "host"
+              },
+              "title": "$host"
             }
           }
-        ],
-        "maxColumnCount": 4,
-        "rowHeightMode": "standard"
+        ]
       }
     },
     "links": [],
@@ -512,7 +530,7 @@
           "definition": "label_values(node_cpu_seconds_total,host)",
           "hide": "dontHide",
           "includeAll": true,
-          "multi": false,
+          "multi": true,
           "name": "host",
           "options": [],
           "query": {

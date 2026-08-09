@@ -15,3 +15,7 @@ scrape_configs:
           - "host.docker.internal:9100"
         labels:
           host: "ocelot"
+      - targets:
+          - "192.168.50.18:9100"
+        labels:
+          host: "kokod"
