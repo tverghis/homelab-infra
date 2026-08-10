@@ -1,0 +1,25 @@
+[Unit]
+Description=Prometheus Node Exporter
+Documentation=https://prometheus.io/docs/guides/node-exporter/
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=node_exporter
+Group=node_exporter
+Type=simple
+ExecStart=/usr/local/bin/node_exporter \
+  --collector.disable-defaults \
+  --collector.cpu \
+  --collector.meminfo \
+  --collector.loadavg \
+  --collector.hwmon \
+  --collector.thermal_zone \
+  --collector.filesystem \
+  --collector.textfile \
+  --collector.textfile.directory=/var/lib/emsite/metrics
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
