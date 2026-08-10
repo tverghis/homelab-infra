@@ -5,8 +5,8 @@
     "name": "4dae0047-f60c-426c-a48f-6c2004b20395",
     "namespace": "default",
     "uid": "34cd8df2-a2dc-4b4a-ae96-019329233fe0",
-    "resourceVersion": "1786348827336014",
-    "generation": 3,
+    "resourceVersion": "1786350463190992",
+    "generation": 4,
     "creationTimestamp": "2026-08-10T07:56:04Z",
     "labels": {
       "grafana.app/deprecatedInternalID": "1556612577161216"
@@ -16,11 +16,11 @@
       "grafana.app/folder": "ffujmcdrgxds0f",
       "grafana.app/managedBy": "classic-file-provisioning",
       "grafana.app/managerId": "Home Monitoring",
-      "grafana.app/sourceChecksum": "ec81478bd07413b1193687044b6c6566",
+      "grafana.app/sourceChecksum": "272284836c88cfb3f948ebb1a505f734",
       "grafana.app/sourcePath": "/var/lib/grafana/dashboards/frame.json",
-      "grafana.app/sourceTimestamp": "1786348819000",
+      "grafana.app/sourceTimestamp": "1786350441000",
       "grafana.app/updatedBy": "access-policy:service",
-      "grafana.app/updatedTimestamp": "2026-08-10T08:00:27Z",
+      "grafana.app/updatedTimestamp": "2026-08-10T08:27:43Z",
       "grafana.app/folderTitle": "Home Monitoring",
       "grafana.app/folderUrl": "/dashboards/f/ffujmcdrgxds0f/home-monitoring"
     }
@@ -150,7 +150,7 @@
                       "kind": "DataQuery",
                       "spec": {
                         "editorMode": "code",
-                        "expr": "update_images_download_time_secs ",
+                        "expr": "avg(update_images_download_time_secs)",
                         "legendFormat": "elapsed",
                         "range": true
                       },
@@ -167,50 +167,18 @@
           "description": "",
           "id": 2,
           "links": [],
-          "title": "Download time",
+          "title": "Avg download time",
           "vizConfig": {
-            "group": "timeseries",
+            "group": "stat",
             "kind": "VizConfig",
             "spec": {
               "fieldConfig": {
                 "defaults": {
                   "color": {
-                    "mode": "palette-classic"
+                    "fixedColor": "#ad46ff",
+                    "mode": "thresholds"
                   },
-                  "custom": {
-                    "axisBorderShow": false,
-                    "axisCenteredZero": false,
-                    "axisColorMode": "text",
-                    "axisLabel": "",
-                    "axisPlacement": "auto",
-                    "barAlignment": 0,
-                    "barWidthFactor": 0.6,
-                    "drawStyle": "line",
-                    "fillOpacity": 0,
-                    "gradientMode": "none",
-                    "hideFrom": {
-                      "legend": false,
-                      "tooltip": false,
-                      "viz": false
-                    },
-                    "insertNulls": false,
-                    "lineInterpolation": "linear",
-                    "lineWidth": 1,
-                    "pointSize": 5,
-                    "scaleDistribution": {
-                      "type": "linear"
-                    },
-                    "showPoints": "auto",
-                    "showValues": false,
-                    "spanNulls": false,
-                    "stacking": {
-                      "group": "A",
-                      "mode": "none"
-                    },
-                    "thresholdsStyle": {
-                      "mode": "off"
-                    }
-                  },
+                  "decimals": 1,
                   "thresholds": {
                     "mode": "absolute",
                     "steps": [
@@ -224,28 +192,26 @@
                       }
                     ]
                   },
-                  "unit": "dtdurations"
+                  "unit": "s"
                 },
                 "overrides": []
               },
               "options": {
-                "annotations": {
-                  "clustering": -1,
-                  "multiLane": false
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
                 },
-                "legend": {
-                  "calcs": [],
-                  "displayMode": "list",
-                  "enableFacetedFilter": false,
-                  "overflow": "ellipsis",
-                  "placement": "bottom",
-                  "showLegend": false
-                },
-                "tooltip": {
-                  "hideZeros": false,
-                  "mode": "single",
-                  "sort": "none"
-                }
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
               }
             },
             "version": "13.1.3"
@@ -859,6 +825,96 @@
             "version": "13.1.3"
           }
         }
+      },
+      "panel-8": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "time() - update_images_last_success_time",
+                        "legendFormat": "__auto",
+                        "range": true
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 8,
+          "links": [],
+          "title": "Since last update",
+          "vizConfig": {
+            "group": "stat",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "decimals": 1,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "#EAB839",
+                        "value": 900
+                      },
+                      {
+                        "color": "red",
+                        "value": 1200
+                      }
+                    ]
+                  },
+                  "unit": "s"
+                },
+                "overrides": []
+              },
+              "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              }
+            },
+            "version": "13.1.3"
+          }
+        }
       }
     },
     "layout": {
@@ -898,6 +954,15 @@
                         "element": {
                           "kind": "ElementReference",
                           "name": "panel-2"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "AutoGridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-8"
                         }
                       }
                     }
