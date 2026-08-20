@@ -10,19 +10,6 @@
     "creationTimestamp": "2026-08-10T07:56:04Z",
     "labels": {
       "grafana.app/deprecatedInternalID": "1556612577161216"
-    },
-    "annotations": {
-      "grafana.app/createdBy": "access-policy:service",
-      "grafana.app/folder": "ffujmcdrgxds0f",
-      "grafana.app/managedBy": "classic-file-provisioning",
-      "grafana.app/managerId": "Home Monitoring",
-      "grafana.app/sourceChecksum": "51ae7a37d4efcdfd4039842f475e09d3",
-      "grafana.app/sourcePath": "/var/lib/grafana/dashboards/frame.json",
-      "grafana.app/sourceTimestamp": "1786408369000",
-      "grafana.app/updatedBy": "access-policy:service",
-      "grafana.app/updatedTimestamp": "2026-08-11T00:34:14Z",
-      "grafana.app/folderTitle": "Home Monitoring",
-      "grafana.app/folderUrl": "/dashboards/f/ffujmcdrgxds0f/home-monitoring"
     }
   },
   "spec": {

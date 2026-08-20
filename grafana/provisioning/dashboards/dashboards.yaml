@@ -4,6 +4,7 @@ providers:
   - name: "Home Monitoring"
     orgId: 1
     folder: "Home Monitoring"
+    folderUid: "home-monitoring"
     type: file
     disableDeletion: false
     editable: false
