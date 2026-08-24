@@ -517,7 +517,7 @@
     "preload": false,
     "tags": [],
     "timeSettings": {
-      "autoRefresh": "",
+      "autoRefresh": "1m",
       "autoRefreshIntervals": [
         "5s",
         "10s",
@@ -543,8 +543,8 @@
         "spec": {
           "allowCustomValue": false,
           "current": {
-            "text": "ocelot",
-            "value": "ocelot"
+            "text": "All",
+            "value": "$__all"
           },
           "definition": "label_values(node_cpu_seconds_total,host)",
           "hide": "dontHide",
