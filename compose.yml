@@ -8,12 +8,34 @@ services:
       - "80:80"
 
     volumes:
-      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./caddy:/etc/caddy:ro
       - caddy-data:/data
       - caddy-config:/config
 
     depends_on:
       - grafana
+
+  coredns:
+    image: coredns/coredns:1.14.7
+    container_name: coredns
+    restart: unless-stopped
+
+    command:
+      - "-conf"
+      - "/etc/coredns/Corefile"
+
+    ports:
+      - target: 53
+        host_ip: "100.110.175.52"
+        published: "53"
+        protocol: udp
+      - target: 53
+        host_ip: "100.110.175.52"
+        published: "53"
+        protocol: tcp
+
+    volumes:
+      - ./coredns:/etc/coredns:ro
 
   prometheus:
     image: prom/prometheus:latest
@@ -24,7 +46,7 @@ services:
       - "9090:9090"
 
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus:/etc/prometheus:ro
       - prometheus-data:/prometheus
 
     extra_hosts:

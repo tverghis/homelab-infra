@@ -8,6 +8,14 @@ scrape_configs:
       - targets:
           - "prometheus:9090"
 
+  - job_name: "coredns"
+    scrape_interval: 15s
+    static_configs:
+      - targets:
+          - "coredns:9153"
+        labels:
+          host: "ocelot"
+
   - job_name: "machines"
     scrape_interval: 1m
     static_configs:

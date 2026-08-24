@@ -1,0 +1,10 @@
+home.tverghis.space:53 {
+    errors
+    health 0.0.0.0:8080
+    prometheus 0.0.0.0:9153
+    reload 30s
+
+    file /etc/coredns/db.home.tverghis.space {
+        reload 30s
+    }
+}

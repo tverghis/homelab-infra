@@ -1,0 +1,14 @@
+$ORIGIN home.tverghis.space.
+$TTL 300
+
+@ IN SOA ns.home.tverghis.space. hostmaster.tverghis.space. (
+    2026082302 ; serial
+    3600       ; refresh
+    600        ; retry
+    604800     ; expire
+    300        ; negative cache TTL
+)
+
+@         IN NS    ns.home.tverghis.space.
+ns        IN A     100.110.175.52
+dashboard IN A     100.110.175.52
