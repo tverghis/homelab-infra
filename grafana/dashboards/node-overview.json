@@ -4,12 +4,25 @@
   "metadata": {
     "name": "ad5sxhj",
     "namespace": "default",
-    "uid": "dac08030-ea90-4c78-b286-dbdd3430094e",
-    "resourceVersion": "1786252260879993",
-    "generation": 15,
-    "creationTimestamp": "2026-08-08T07:31:15Z",
+    "uid": "129d3462-a3b4-4c8e-849d-a164cb61deb1",
+    "resourceVersion": "1787549532593996",
+    "generation": 2,
+    "creationTimestamp": "2026-08-24T05:06:05Z",
     "labels": {
-      "grafana.app/deprecatedInternalID": "825591804997632"
+      "grafana.app/deprecatedInternalID": "2083665462706176"
+    },
+    "annotations": {
+      "grafana.app/createdBy": "access-policy:service",
+      "grafana.app/folder": "home-monitoring",
+      "grafana.app/managedBy": "classic-file-provisioning",
+      "grafana.app/managerId": "Home Monitoring",
+      "grafana.app/sourceChecksum": "75abeb027f2272b43f6f57039e977075",
+      "grafana.app/sourcePath": "/var/lib/grafana/dashboards/node-overview.json",
+      "grafana.app/sourceTimestamp": "1787549365000",
+      "grafana.app/updatedBy": "access-policy:service",
+      "grafana.app/updatedTimestamp": "2026-08-24T05:32:12Z",
+      "grafana.app/folderTitle": "Home Monitoring",
+      "grafana.app/folderUrl": "/dashboards/f/home-monitoring/home-monitoring"
     }
   },
   "spec": {
@@ -121,6 +134,7 @@
                   "le": 1e-9
                 },
                 "legend": {
+                  "placement": "bottom",
                   "show": false
                 },
                 "rowsFrame": {
@@ -137,7 +151,7 @@
                 }
               }
             },
-            "version": "13.1.3"
+            "version": "13.2.0"
           }
         }
       },
@@ -225,6 +239,7 @@
                   "le": 1e-9
                 },
                 "legend": {
+                  "placement": "bottom",
                   "show": false
                 },
                 "rowsFrame": {
@@ -241,7 +256,7 @@
                 }
               }
             },
-            "version": "13.1.3"
+            "version": "13.2.0"
           }
         }
       },
@@ -336,7 +351,7 @@
                 "valueMode": "color"
               }
             },
-            "version": "13.1.3"
+            "version": "13.2.0"
           }
         }
       },
@@ -424,6 +439,7 @@
                   "le": 1e-9
                 },
                 "legend": {
+                  "placement": "bottom",
                   "show": false
                 },
                 "rowsFrame": {
@@ -440,65 +456,205 @@
                 }
               }
             },
-            "version": "13.1.3"
+            "version": "13.2.0"
+          }
+        }
+      },
+      "panel-9": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "min(up{job=\"coredns\"})",
+                        "legendFormat": "__auto",
+                        "range": true
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 9,
+          "links": [],
+          "title": "CoreDNS",
+          "vizConfig": {
+            "group": "stat",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "fixedColor": "#ad46ff",
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "0": {
+                          "color": "red",
+                          "index": 1,
+                          "text": "Offline"
+                        },
+                        "1": {
+                          "color": "green",
+                          "index": 0,
+                          "text": "Online"
+                        }
+                      },
+                      "type": "value"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              }
+            },
+            "version": "13.2.0"
           }
         }
       }
     },
     "layout": {
-      "kind": "GridLayout",
+      "kind": "RowsLayout",
       "spec": {
-        "items": [
+        "rows": [
           {
-            "kind": "GridLayoutItem",
+            "kind": "RowsLayoutRow",
             "spec": {
-              "element": {
-                "kind": "ElementReference",
-                "name": "panel-5"
+              "collapse": false,
+              "fillScreen": false,
+              "hideHeader": false,
+              "layout": {
+                "kind": "AutoGridLayout",
+                "spec": {
+                  "columnWidthMode": "narrow",
+                  "items": [
+                    {
+                      "kind": "AutoGridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-9"
+                        }
+                      }
+                    }
+                  ],
+                  "maxColumnCount": 8,
+                  "rowHeightMode": "short"
+                }
               },
-              "height": 8,
-              "width": 12,
-              "x": 0,
-              "y": 0
+              "title": "Service Health"
             }
           },
           {
-            "kind": "GridLayoutItem",
+            "kind": "RowsLayoutRow",
             "spec": {
-              "element": {
-                "kind": "ElementReference",
-                "name": "panel-6"
+              "collapse": false,
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-5"
+                        },
+                        "height": 8,
+                        "width": 12,
+                        "x": 0,
+                        "y": 0
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-6"
+                        },
+                        "height": 8,
+                        "width": 12,
+                        "x": 12,
+                        "y": 0
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-7"
+                        },
+                        "height": 8,
+                        "width": 12,
+                        "x": 0,
+                        "y": 8
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-8"
+                        },
+                        "height": 8,
+                        "width": 12,
+                        "x": 12,
+                        "y": 8
+                      }
+                    }
+                  ]
+                }
               },
-              "height": 8,
-              "width": 12,
-              "x": 12,
-              "y": 0
-            }
-          },
-          {
-            "kind": "GridLayoutItem",
-            "spec": {
-              "element": {
-                "kind": "ElementReference",
-                "name": "panel-7"
-              },
-              "height": 8,
-              "width": 12,
-              "x": 0,
-              "y": 8
-            }
-          },
-          {
-            "kind": "GridLayoutItem",
-            "spec": {
-              "element": {
-                "kind": "ElementReference",
-                "name": "panel-8"
-              },
-              "height": 8,
-              "width": 12,
-              "x": 12,
-              "y": 8
+              "title": "Resource Utilization"
             }
           }
         ]
