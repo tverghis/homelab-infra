@@ -5,8 +5,8 @@
     "name": "ad5sxhj",
     "namespace": "default",
     "uid": "129d3462-a3b4-4c8e-849d-a164cb61deb1",
-    "resourceVersion": "1787549532593996",
-    "generation": 2,
+    "resourceVersion": "1787636869974991",
+    "generation": 3,
     "creationTimestamp": "2026-08-24T05:06:05Z",
     "labels": {
       "grafana.app/deprecatedInternalID": "2083665462706176"
@@ -16,11 +16,11 @@
       "grafana.app/folder": "home-monitoring",
       "grafana.app/managedBy": "classic-file-provisioning",
       "grafana.app/managerId": "Home Monitoring",
-      "grafana.app/sourceChecksum": "75abeb027f2272b43f6f57039e977075",
+      "grafana.app/sourceChecksum": "3689deb4d88afe200165db6a8f715ea8",
       "grafana.app/sourcePath": "/var/lib/grafana/dashboards/node-overview.json",
-      "grafana.app/sourceTimestamp": "1787549365000",
+      "grafana.app/sourceTimestamp": "1787636836000",
       "grafana.app/updatedBy": "access-policy:service",
-      "grafana.app/updatedTimestamp": "2026-08-24T05:32:12Z",
+      "grafana.app/updatedTimestamp": "2026-08-25T05:47:49Z",
       "grafana.app/folderTitle": "Home Monitoring",
       "grafana.app/folderUrl": "/dashboards/f/home-monitoring/home-monitoring"
     }
@@ -50,6 +50,104 @@
     "cursorSync": "Off",
     "editable": true,
     "elements": {
+      "panel-10": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "min(up{job=\"copyparty\"})",
+                        "legendFormat": "__auto",
+                        "range": true
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 10,
+          "links": [],
+          "title": "copyparty",
+          "vizConfig": {
+            "group": "stat",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "fixedColor": "#ad46ff",
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "0": {
+                          "color": "red",
+                          "index": 1,
+                          "text": "Offline"
+                        },
+                        "1": {
+                          "color": "green",
+                          "index": 0,
+                          "text": "Online"
+                        }
+                      },
+                      "type": "value"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              }
+            },
+            "version": "13.2.0"
+          }
+        }
+      },
       "panel-5": {
         "kind": "Panel",
         "spec": {
@@ -580,6 +678,15 @@
                         "element": {
                           "kind": "ElementReference",
                           "name": "panel-9"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "AutoGridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-10"
                         }
                       }
                     }
