@@ -16,6 +16,18 @@ scrape_configs:
         labels:
           host: "ocelot"
 
+  - job_name: "copyparty"
+    scrape_interval: 30s
+    metrics_path: "/.cpr/metrics"
+    basic_auth:
+      username: "prometheus"
+      password_file: "/run/secrets/copyparty_metrics_password"
+    static_configs:
+      - targets:
+          - "copyparty:3923"
+        labels:
+          host: "ocelot"
+
   - job_name: "machines"
     scrape_interval: 1m
     static_configs:

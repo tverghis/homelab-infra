@@ -3,5 +3,6 @@ remote_dir := "/opt/infra"
 
 update-configs:
     rsync --archive --no-owner --no-group --verbose \
-        compose.yml caddy coredns grafana prometheus \
+        --exclude copyparty/initial_passwords \
+        compose.yml caddy copyparty coredns grafana prometheus \
         "{{host}}:{{remote_dir}}/"

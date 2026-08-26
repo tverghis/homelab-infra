@@ -1,3 +1,7 @@
 http://dashboard.home.tverghis.space {
 	reverse_proxy grafana:3000
 }
+
+http://files.home.tverghis.space {
+	reverse_proxy copyparty:3923
+}
