@@ -5,3 +5,7 @@ http://dashboard.home.tverghis.space {
 http://files.home.tverghis.space {
 	reverse_proxy copyparty:3923
 }
+
+http://pico.home.tverghis.space {
+	reverse_proxy pico:8080
+}

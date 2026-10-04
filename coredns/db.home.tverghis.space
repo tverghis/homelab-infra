@@ -2,7 +2,7 @@ $ORIGIN home.tverghis.space.
 $TTL 300
 
 @ IN SOA ns.home.tverghis.space. hostmaster.tverghis.space. (
-    2026082501 ; serial
+    2026100301 ; serial
     3600       ; refresh
     600        ; retry
     604800     ; expire
@@ -13,3 +13,4 @@ $TTL 300
 ns        IN A     100.110.175.52
 dashboard IN A     100.110.175.52
 files     IN A     100.110.175.52
+pico      IN A     100.110.175.52
