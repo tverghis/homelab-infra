@@ -9,3 +9,7 @@ http://files.home.tverghis.space {
 http://pico.home.tverghis.space {
 	reverse_proxy pico:8080
 }
+
+http://pico-preview.home.tverghis.space {
+	reverse_proxy pico-preview:8080
+}
