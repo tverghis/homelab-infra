@@ -3,7 +3,7 @@
 This document explains how to set up automatic deployments for a new application.
 The application runs in Docker on a homelab host.
 GitHub Actions builds the application and deploys it over the tailnet.
-Caddy serves the application at a name under `home.tverghis.space`.
+Caddy serves the application over HTTPS at a name under `home.tverghis.space`.
 
 The first application that used this method is Pico.
 Use its repository as a working example.
@@ -131,7 +131,7 @@ Use `autogroup:member` as the source instead.
 	{
 		"src":    "tag:ci",
 		"accept": ["<host>:22"],
-		"deny":   ["<host>:80", "<other-host>:22"],
+		"deny":   ["<host>:80", "<host>:443", "<other-host>:22"],
 	},
 	{
 		"src":    "<your-tailscale-login>",
@@ -193,7 +193,7 @@ Publish the port of the application on the tailnet IP of its host.
 Caddy then sends requests to `<host-ip>:<port>`.
 In the compose file, use `ports: ["<host-ip>:<port>:<port>"]`.
 Do not use the `networks` section from the template.
-Use `reverse_proxy <host-ip>:<port>` in the Caddyfile.
+Use `reverse_proxy <host-ip>:<port>` in the Caddyfile route in step 3.7.
 
 ## Part 3: Set up the application
 
@@ -244,6 +244,10 @@ Use a bind mount for the data. Then you can copy and back up the data as normal 
 
 `deploy/deploy.sh`. Make the file executable.
 
+The health check must use `https://` and port `443`.
+Over `http://`, Caddy answers every request with a `308` redirect to HTTPS.
+`curl -f` fails only for status codes of 400 and higher, so an `http://` check passes even when the application is down.
+
 ```sh
 #!/bin/sh
 # Runs on the host, in /opt/<app>, after the image is loaded.
@@ -257,10 +261,12 @@ docker compose up -d --remove-orphans
 
 # Check the application through Caddy.
 # This tests the route from Caddy to the container.
+# Use HTTPS: over HTTP, Caddy answers with a redirect, which curl -f counts as
+# a pass without ever reaching the application.
 for i in 1 2 3 4 5 6 7 8 9 10; do
     if curl -fsS -o /dev/null \
-        --resolve <domain>:80:<caddy-ip> \
-        http://<domain>/<health-path>; then
+        --resolve <domain>:443:<caddy-ip> \
+        https://<domain>/<health-path>; then
         echo "<app> $APP_TAG is healthy"
         break
     fi
@@ -544,13 +550,18 @@ Do this before the first deployment. The health check uses the route.
 
 Edit these files in this repository.
 
-In `caddy/Caddyfile`, add a block:
+Caddy has one site block for `*.home.tverghis.space`, with one wildcard certificate.
+Do not add a new site block. In `caddy/Caddyfile`, add a matcher and a `handle` block inside the `*.home.tverghis.space` block:
 
 ```
-http://<domain> {
-	reverse_proxy <app>:<port>
-}
+	@<app> host <domain>
+	handle @<app> {
+		reverse_proxy <app>:<port>
+	}
 ```
+
+Put it before the final `handle { abort }` block.
+The wildcard certificate already covers `<domain>`, so the application needs no certificate work.
 
 In `coredns/db.home.tverghis.space`, add an `A` record. Use the `<caddy-ip>` address.
 Increase the serial number in the SOA record.
@@ -567,7 +578,8 @@ Then do these steps:
 
 1. Commit the changes.
 2. Send the files to the host: `just update-configs`.
-3. Reload Caddy:
+   This command overwrites the files on the host. Pull the latest changes first, or you undo changes that you made from another computer.
+3. Reload Caddy. A reload is enough. Caddy does not need a rebuild:
 
 ```bash
 ssh admin@<host> 'docker exec caddy caddy reload --config /etc/caddy/Caddyfile'
@@ -589,7 +601,7 @@ Caddy can log a warning that `<app>` does not resolve. This is normal before the
 3. Select **Release and deploy**, then **Run workflow**.
 4. Use the branch `main`. Choose `minor` for the first release. The version is `v0.1.0`.
 5. Wait for both jobs to finish. The first build is slow because it has no cache.
-6. Open `http://<domain>` and make sure that the application works.
+6. Open `https://<domain>` and make sure that the application works.
 
 ### 3.9 Copy existing data (optional)
 
@@ -650,7 +662,11 @@ ssh admin@<host> 'docker logs --tail 100 <app>'
 | `scp` cannot write to `/opt/<app>` | The deploy user must own the folder. See step 3.4. |
 | `docker load` is denied | The deploy user must be in the `docker` group. See step 2.1. |
 | The health check fails | Read the logs that the script prints. Check the health path. Check the data folder owner. |
+| The connection closes with no response, or the browser says that the connection was reset | Caddy has no `handle` block for `<domain>`, so the final `handle { abort }` block drops the connection. See step 3.7. |
 | Caddy returns `502` | Caddy cannot reach the container. Make sure that the container is on the Caddy network. Make sure that the port is correct. |
 | The name does not resolve | Check the DNS record and the serial number. Wait 30 seconds. Check that your device uses the CoreDNS server for `home.tverghis.space`. |
 | The workflow is not in the Actions tab | The workflow file must be on the default branch. |
 | The image does not start on the host | The image architecture must match the host. See the start of this document. |
+| The certificate request fails with a Porkbun error | API access is off for `tverghis.space` in Porkbun. Open **Domain Management**, open the settings of the domain, and turn on **API Access**. Also check the keys in `caddy/porkbun.env` on the host. |
+| The certificate request times out | Caddy checks the challenge record through CoreDNS, which never has it. Keep the `resolvers 1.1.1.1 9.9.9.9` line in the `tls` block of the Caddyfile. |
+| The browser says that the certificate is not trusted | The Caddyfile still has the `acme_ca` line for the Let's Encrypt staging CA. Remove it, deploy, then delete the staging certificate from the `caddy-data` volume and restart Caddy. |

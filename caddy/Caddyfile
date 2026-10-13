@@ -1,15 +1,36 @@
-http://dashboard.home.tverghis.space {
-	reverse_proxy grafana:3000
-}
+*.home.tverghis.space {
+	tls {
+		dns porkbun {
+			api_key {env.PORKBUN_API_KEY}
+			api_secret_key {env.PORKBUN_SECRET_KEY}
+		}
+		# CoreDNS claims home.tverghis.space on the tailnet but never has the
+		# challenge record, so check propagation against public resolvers.
+		resolvers 1.1.1.1 9.9.9.9
+	}
 
-http://files.home.tverghis.space {
-	reverse_proxy copyparty:3923
-}
+	@dashboard host dashboard.home.tverghis.space
+	handle @dashboard {
+		reverse_proxy grafana:3000
+	}
 
-http://pico.home.tverghis.space {
-	reverse_proxy pico:8080
-}
+	@files host files.home.tverghis.space
+	handle @files {
+		reverse_proxy copyparty:3923
+	}
 
-http://pico-preview.home.tverghis.space {
-	reverse_proxy pico-preview:8080
+	@pico host pico.home.tverghis.space
+	handle @pico {
+		reverse_proxy pico:8080
+	}
+
+	@pico-preview host pico-preview.home.tverghis.space
+	handle @pico-preview {
+		reverse_proxy pico-preview:8080
+	}
+
+	# Unknown names under home.tverghis.space.
+	handle {
+		abort
+	}
 }

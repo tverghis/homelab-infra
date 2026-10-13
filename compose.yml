@@ -1,11 +1,17 @@
 services:
   caddy:
-    image: caddy:2.11.4-alpine
+    build: ./caddy
+    image: infra-caddy:2.11.4-porkbun
     container_name: caddy
     restart: unless-stopped
 
+    env_file:
+      - ./caddy/porkbun.env
+
     ports:
       - "100.110.175.52:80:80"
+      - "100.110.175.52:443:443"
+      - "100.110.175.52:443:443/udp"
 
     volumes:
       - ./caddy:/etc/caddy:ro

@@ -1,3 +1,4 @@
 /copyparty/accounts.conf
 /prometheus/copyparty_metrics_password
 /copyparty/initial_passwords
+/caddy/porkbun.env
